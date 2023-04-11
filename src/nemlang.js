@@ -9,11 +9,17 @@
     };
 
     // A function to add a paragraph to the site with text and math
-    NemLang.AddP = function(content) {
-        var paragraph = document.createElement('p');
-        paragraph.innerHTML = content;
-        document.body.appendChild(paragraph);
+    NemLang.AddP = function(htmlContent) {
+    var p = document.createElement('p');
+    p.innerHTML = htmlContent;
+    document.body.appendChild(p);
     };
+
+	
+	NemLang.color = function(text, color) {
+    return '<span style="color: ' + color + ';">' + text + '</span>';
+    };
+
 
     // Export NemLang to global scope
     if (typeof module !== 'undefined' && module.exports) {
