@@ -27,6 +27,27 @@
         }
         return h;
     };
+	
+	NemLang.AddButton = function(text, skipAppend) {
+    var button = document.createElement("button");
+    button.textContent = text;
+
+    if (!skipAppend) {
+        document.body.appendChild(button);
+    }
+
+    return button;
+    };
+	
+	NemLang.click = function(object, doFunction) {
+    object.addEventListener("click", function() {
+        if (typeof doFunction === "function") {
+            doFunction();
+        }
+    });
+    };
+
+
 
     NemLang.color = function(color, backgroundColor) {
     return function(element) {
