@@ -1,8 +1,8 @@
 (function () {
     "use strict";
-
+    
     var NemLang = {};
-
+    
     // A utility function to add two numbers
     NemLang.plus = function (a, b) {
         return a + b;
@@ -45,6 +45,14 @@
             doFunction();
         }
     });
+    };
+	
+	NemLang.Editor = function(editorbool) {
+    if (editorbool) {
+        activateEditorFeatures();
+    } else {
+        deactivateEditorFeatures();
+    }
     };
 
 
