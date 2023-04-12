@@ -125,17 +125,21 @@
     };
 
 
-    NemLang.color = function(object, newColor, isBackgroundColor) {
-    if (typeof newColor !== 'undefined') {
-        if (isBackgroundColor) {
-            object.style.backgroundColor = newColor;
-        } else {
-            object.style.color = newColor;
-        }
+    NemLang.color = function (element, color) {
+    if (element && color) {
+        element.style.color = color;
+    } else if (element && color === undefined) {
+        return element.style.color;
+    } else if (color) {
+        return function (el) {
+            el.style.color = color;
+        };
     } else {
-        return isBackgroundColor ? object.style.backgroundColor : object.style.color;
+        console.error('Invalid arguments provided. Please provide an HTMLElement and a color string.');
     }
-    };
+};
+
+
 	
 	NemLang.Get = function(object, propertyGetter) {
     return propertyGetter(object);
