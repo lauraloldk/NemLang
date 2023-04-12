@@ -114,13 +114,16 @@
     }
 };
 
-   NemLang.text = function(object, newText) {
-    if (typeof newText !== 'undefined') {
-        object.textContent = newText;
-    } else {
-        return object.textContent;
-    }
+   NemLang.text = function(newText) {
+    return function(element) {
+        if (element instanceof HTMLElement) {
+            element.innerText = newText;
+        } else {
+            console.error('Invalid element provided. It must be an instance of HTMLElement.');
+        }
     };
+    };
+
 
     NemLang.color = function(object, newColor, isBackgroundColor) {
     if (typeof newColor !== 'undefined') {
