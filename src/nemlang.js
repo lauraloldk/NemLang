@@ -77,6 +77,53 @@
         element.style.top = y + "px";
         document.body.appendChild(element);
     };
+	
+	NemLang.animate = function(element, properties, duration, easing, callback) {
+    var startStyles = {};
+    var endStyles = properties;
+    var startTime = null;
+    var easingFunctions = {
+        'linear': function(t) { return t; },
+        'easeInQuad': function(t) { return t * t; },
+        'easeOutQuad': function(t) { return t * (2 - t); },
+        'easeInOutQuad': function(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; },
+        // Add more easing functions here
+    };
+
+    // Get the computed style of the element
+    var computedStyle = getComputedStyle(element);
+
+    // Store the initial styles
+    for (var prop in endStyles) {
+        startStyles[prop] = parseFloat(computedStyle[prop]) || 0;
+    }
+
+    // Animation step function
+    function step(timestamp) {
+        if (startTime === null) startTime = timestamp;
+        var progress = (timestamp - startTime) / duration;
+        var easedProgress = (easingFunctions[easing] || easingFunctions.linear)(progress);
+
+        // Set the new styles
+        for (var prop in endStyles) {
+            var startValue = startStyles[prop];
+            var endValue = parseFloat(endStyles[prop]);
+            var currentValue = startValue + (endValue - startValue) * easedProgress;
+            element.style[prop] = currentValue + (prop === 'opacity' ? '' : 'px');
+        }
+
+        // Continue the animation if it's not complete
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            if (typeof callback === 'function') callback();
+        }
+    }
+
+    // Start the animation
+    requestAnimationFrame(step);
+};
+
 
     // Export NemLang to global scope
     if (typeof module !== "undefined" && module.exports) {
