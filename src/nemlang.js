@@ -28,9 +28,21 @@
         return h;
     };
 
-    NemLang.color = function (text, color) {
-        return '<span style="color: ' + color + ';">' + text + "</span>";
+    NemLang.color = function(color, backgroundColor) {
+    return function(element) {
+        if (typeof color !== "undefined") {
+            element.style.color = color;
+        }
+        if (typeof backgroundColor !== "undefined") {
+            element.style.backgroundColor = backgroundColor;
+        }
+        return {
+            color: element.style.color,
+            backgroundColor: element.style.backgroundColor
+        };
     };
+    };
+
 
     NemLang.dot = function (callback, showInput) {
         function createDotAndExecuteCallback(event) {
@@ -78,51 +90,23 @@
         document.body.appendChild(element);
     };
 	
-	NemLang.animate = function(element, properties, duration, easing, callback) {
-    var startStyles = {};
-    var endStyles = properties;
-    var startTime = null;
-    var easingFunctions = {
-        'linear': function(t) { return t; },
-        'easeInQuad': function(t) { return t * t; },
-        'easeOutQuad': function(t) { return t * (2 - t); },
-        'easeInOutQuad': function(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; },
-        // Add more easing functions here
+	NemLang.ChangeObject = function(element, setterGetter) {
+    if (typeof setterGetter === "function") {
+        return setterGetter(element);
+    } else {
+        console.error("Setter/Getter must be a function.");
+    }
     };
 
-    // Get the computed style of the element
-    var computedStyle = getComputedStyle(element);
-
-    // Store the initial styles
-    for (var prop in endStyles) {
-        startStyles[prop] = parseFloat(computedStyle[prop]) || 0;
-    }
-
-    // Animation step function
-    function step(timestamp) {
-        if (startTime === null) startTime = timestamp;
-        var progress = (timestamp - startTime) / duration;
-        var easedProgress = (easingFunctions[easing] || easingFunctions.linear)(progress);
-
-        // Set the new styles
-        for (var prop in endStyles) {
-            var startValue = startStyles[prop];
-            var endValue = parseFloat(endStyles[prop]);
-            var currentValue = startValue + (endValue - startValue) * easedProgress;
-            element.style[prop] = currentValue + (prop === 'opacity' ? '' : 'px');
-        }
-
-        // Continue the animation if it's not complete
-        if (progress < 1) {
-            requestAnimationFrame(step);
+    NemLang.text = function(newText) {
+    return function(element) {
+        if (typeof newText === "undefined") {
+            return element.textContent;
         } else {
-            if (typeof callback === 'function') callback();
+            element.textContent = newText;
         }
-    }
-
-    // Start the animation
-    requestAnimationFrame(step);
-};
+    };
+    };
 
 
     // Export NemLang to global scope
