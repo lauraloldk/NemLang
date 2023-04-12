@@ -48,23 +48,6 @@
     };
 
 
-
-    NemLang.color = function(color, backgroundColor) {
-    return function(element) {
-        if (typeof color !== "undefined") {
-            element.style.color = color;
-        }
-        if (typeof backgroundColor !== "undefined") {
-            element.style.backgroundColor = backgroundColor;
-        }
-        return {
-            color: element.style.color,
-            backgroundColor: element.style.backgroundColor
-        };
-    };
-    };
-
-
     NemLang.dot = function (callback, showInput) {
         function createDotAndExecuteCallback(event) {
             var x = event.clientX;
@@ -111,23 +94,36 @@
         document.body.appendChild(element);
     };
 	
-	NemLang.ChangeObject = function(element, setterGetter) {
-    if (typeof setterGetter === "function") {
-        return setterGetter(element);
+	NemLang.ChangeObject = function(object, propertySetter) {
+    if (object instanceof HTMLElement) {
+        if (typeof propertySetter === 'function') {
+            propertySetter(object);
+        }
     } else {
-        console.error("Setter/Getter must be a function.");
+        console.error('Invalid object provided. It must be an instance of HTMLElement.');
     }
-    };
+};
 
     NemLang.text = function(newText) {
     return function(element) {
-        if (typeof newText === "undefined") {
-            return element.textContent;
-        } else {
+        if (element.tagName === 'BUTTON') {
             element.textContent = newText;
+        } else {
+            element.innerHTML = newText;
         }
     };
+};
+
+    NemLang.color = function(newColor, backgroundColor) {
+    return function(element) {
+        if (backgroundColor) {
+            element.style.backgroundColor = newColor;
+        } else {
+            element.style.color = newColor;
+        }
     };
+};
+
 
 
     // Export NemLang to global scope
