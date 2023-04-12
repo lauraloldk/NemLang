@@ -94,7 +94,7 @@
         document.body.appendChild(element);
     };
 	
-	NemLang.ChangeObject = function(object, propertySetter) {
+	NemLang.Set = function(object, propertySetter) {
     if (object instanceof HTMLElement) {
         if (typeof propertySetter === 'function') {
             propertySetter(object);
@@ -104,25 +104,31 @@
     }
 };
 
-    NemLang.text = function(newText) {
-    return function(element) {
-        if (element.tagName === 'BUTTON') {
-            element.textContent = newText;
-        } else {
-            element.innerHTML = newText;
-        }
+   NemLang.text = function(object, newText) {
+    if (typeof newText !== 'undefined') {
+        object.textContent = newText;
+    } else {
+        return object.textContent;
+    }
     };
-};
 
-    NemLang.color = function(newColor, backgroundColor) {
-    return function(element) {
-        if (backgroundColor) {
-            element.style.backgroundColor = newColor;
+    NemLang.color = function(object, newColor, isBackgroundColor) {
+    if (typeof newColor !== 'undefined') {
+        if (isBackgroundColor) {
+            object.style.backgroundColor = newColor;
         } else {
-            element.style.color = newColor;
+            object.style.color = newColor;
         }
+    } else {
+        return isBackgroundColor ? object.style.backgroundColor : object.style.color;
+    }
     };
-};
+	
+	NemLang.Get = function(object, propertyGetter) {
+    return propertyGetter(object);
+    };
+
+
 
 
 
