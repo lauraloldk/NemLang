@@ -168,6 +168,80 @@
         inputs[i].remove();
     }
     };
+	
+    NemLang.Move = function (object, activatedbool) {
+    if (!(object instanceof HTMLElement)) {
+        console.error('Invalid object provided. It must be an instance of HTMLElement.');
+        return;
+    }
+
+    const moveButtons = document.createElement('div');
+    moveButtons.className = 'move-buttons';
+    moveButtons.style.position = 'absolute';
+    moveButtons.style.display = 'flex';
+    moveButtons.style.flexDirection = 'column';
+    moveButtons.style.alignItems = 'center';
+
+    const directions = ['Up', 'Down', 'Left', 'Right'];
+    const moveElement = (direction) => {
+        switch (direction) {
+            case 'Up':
+                object.style.top = (parseInt(object.style.top) || 0) - 10 + 'px';
+                break;
+            case 'Down':
+                object.style.top = (parseInt(object.style.top) || 0) + 10 + 'px';
+                break;
+            case 'Left':
+                object.style.left = (parseInt(object.style.left) || 0) - 10 + 'px';
+                break;
+            case 'Right':
+                object.style.left = (parseInt(object.style.left) || 0) + 10 + 'px';
+                break;
+            default:
+                console.error('Invalid direction provided.');
+        }
+    };
+
+    directions.forEach((direction) => {
+        const button = document.createElement('button');
+        button.textContent = direction;
+        button.onclick = () => moveElement(direction);
+
+        if (direction === 'Up' || direction === 'Down') {
+            moveButtons.appendChild(button);
+        } else {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex';
+            wrapper.style.justifyContent = direction === 'Left' ? 'flex-start' : 'flex-end';
+            wrapper.style.width = '100%';
+
+            if (direction === 'Left') {
+                button.style.marginRight = '3px';
+                wrapper.appendChild(button);
+                moveButtons.insertBefore(wrapper, moveButtons.children[1]);
+            } else {
+                button.style.marginLeft = '3px';
+                moveButtons.children[1].appendChild(button);
+            }
+        }
+    });
+
+    object.style.position = 'absolute';
+    const parent = object.parentNode;
+    const objectRect = object.getBoundingClientRect();
+    moveButtons.style.top = (objectRect.top + window.scrollY - 20) + 'px';
+    moveButtons.style.left = (objectRect.left + window.scrollX - 20) + 'px';
+
+    if (activatedbool) {
+        parent.insertBefore(moveButtons, object);
+    } else {
+        const existingMoveButtons = parent.querySelector('.move-buttons');
+        if (existingMoveButtons) {
+            existingMoveButtons.remove();
+        }
+    }
+};
+	
 
     // Export NemLang to global scope
     if (typeof module !== "undefined" && module.exports) {
