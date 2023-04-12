@@ -136,6 +136,16 @@
     return propertyGetter(object);
     };
 
+    NemLang.WaitForClick = function() {
+    return new Promise((resolve) => {
+        function onClick(event) {
+            document.removeEventListener("click", onClick);
+            resolve();
+        }
+
+        document.addEventListener("click", onClick);
+    });
+    };
 
 
 
