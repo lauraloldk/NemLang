@@ -17,6 +17,16 @@
         }
         return p;
     };
+    
+     NemLang.AddH = function(text, skipAppend, variant) {
+        variant = variant || 1;
+        var h = document.createElement("h" + variant);
+        h.innerHTML = text;
+        if (!skipAppend) {
+            document.body.appendChild(h);
+        }
+        return h;
+    };
 
     NemLang.color = function (text, color) {
         return '<span style="color: ' + color + ';">' + text + "</span>";
