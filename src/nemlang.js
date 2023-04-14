@@ -155,6 +155,15 @@
         document.addEventListener("click", onClick);
     });
     };
+	
+	NemLang.Visible = function(object, visiblebool) {
+    if (visiblebool) {
+        object.style.display = '';
+    } else {
+        object.style.display = 'none';
+    }
+    };
+
 
     NemLang.Cleardot = function() {
     var dots = document.querySelectorAll(".nemlang-dot");
@@ -216,11 +225,11 @@
             wrapper.style.width = '100%';
 
             if (direction === 'Left') {
-                button.style.marginRight = '3px';
+                button.style.marginRight = '5px';
                 wrapper.appendChild(button);
                 moveButtons.insertBefore(wrapper, moveButtons.children[1]);
             } else {
-                button.style.marginLeft = '3px';
+                button.style.marginLeft = '35px';
                 moveButtons.children[1].appendChild(button);
             }
         }
@@ -240,8 +249,20 @@
             existingMoveButtons.remove();
         }
     }
-};
-	
+    };
+
+    NemLang.AddImage = function (src, alt, skipAppend) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.alt = alt || "";
+
+    if (!skipAppend) {
+        document.body.appendChild(img);
+    }
+
+    return img;
+    };
+
 
     // Export NemLang to global scope
     if (typeof module !== "undefined" && module.exports) {
